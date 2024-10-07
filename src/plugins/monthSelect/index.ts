@@ -140,22 +140,31 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       if (!fp.rContainer) return;
       if (!fp.selectedDates.length) return;
 
+      // Clear the "selected" class from all month elements
       const currentlySelected = fp.rContainer.querySelectorAll(
         ".flatpickr-monthSelect-month.selected"
       );
+      currentlySelected.forEach((el) => {
+        el.classList.remove("selected");
+        el.blur(); // Remove focus from input after deselection
+      });
 
-      for (let index = 0; index < currentlySelected.length; index++) {
-        currentlySelected[index].classList.remove("selected");
-      }
+      // Loop through all selected dates and mark their corresponding months as "selected"
+      fp.selectedDates.forEach((date) => {
+        const targetMonth = date.getMonth();
+        const targetYear = date.getFullYear();
 
-      const targetMonth = fp.selectedDates[0].getMonth();
-      const month = fp.rContainer.querySelector(
-        `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
-      );
+        // Only highlight the month if the selected date's year matches the current year
+        if (targetYear === fp.currentYear) {
+          const monthElement = fp.rContainer.querySelector(
+            `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
+          );
 
-      if (month) {
-        month.classList.add("selected");
-      }
+          if (monthElement) {
+            monthElement.classList.add("selected");
+          }
+        }
+      });
     }
 
     function selectYear() {
@@ -220,7 +229,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         date.getMonth(),
         date.getDate()
       );
-      let selectedDates: Date[] = [];
+
+      // Use existing selectedDates in fp
+      let selectedDates = [...fp.selectedDates];
 
       switch (fp.config.mode) {
         case "single":
@@ -228,7 +239,22 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           break;
 
         case "multiple":
-          selectedDates.push(selectedDate);
+          // Add the new selected date if it doesn't already exist
+          const exists = selectedDates.some(
+            (d) =>
+              d.getFullYear() === selectedDate.getFullYear() &&
+              d.getMonth() === selectedDate.getMonth()
+          );
+          if (!exists) {
+            selectedDates.push(selectedDate);
+          } else {
+            // If the date exists, remove it (toggle functionality)
+            selectedDates = selectedDates.filter(
+              (d) =>
+                d.getFullYear() !== selectedDate.getFullYear() ||
+                d.getMonth() !== selectedDate.getMonth()
+            );
+          }
           break;
 
         case "range":
@@ -238,7 +264,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
             selectedDates = fp.selectedDates.concat([selectedDate]);
             selectedDates.sort((a, b) => a.getTime() - b.getTime());
           }
-
           break;
       }
 

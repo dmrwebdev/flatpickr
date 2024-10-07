@@ -1897,9 +1897,11 @@ function FlatpickrInstance(element, instanceConfig) {
                 self.config.enableTime ||
                 arr.indexOf(d) === i;
         })
-            .join(self.config.mode !== "range"
-            ? self.config.conjunction
-            : self.l10n.rangeSeparator);
+            .join(self.config.mode === "multiple"
+            ? ", "
+            : self.config.mode !== "range"
+                ? self.config.conjunction
+                : self.l10n.rangeSeparator);
     }
     function updateValue(triggerChange) {
         if (triggerChange === void 0) { triggerChange = true; }
@@ -1909,7 +1911,14 @@ function FlatpickrInstance(element, instanceConfig) {
                     ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
                     : "";
         }
-        self.input.value = getDateStr(self.config.dateFormat);
+        if (self.config.mode === "multiple") {
+            self.input.value = JSON.stringify(self.selectedDates.map(function (date) {
+                return self.formatDate(date, self.config.dateFormat);
+            }));
+        }
+        else {
+            self.input.value = getDateStr(self.config.dateFormat);
+        }
         if (self.altInput !== undefined) {
             self.altInput.value = getDateStr(self.config.altFormat);
         }

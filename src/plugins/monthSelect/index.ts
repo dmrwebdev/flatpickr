@@ -146,7 +146,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       );
       currentlySelected.forEach((el) => {
         el.classList.remove("selected");
-        el.blur(); // Remove focus from input after deselection
+        (el as HTMLElement).blur(); // Remove focus from input after deselection
       });
 
       // Loop through all selected dates and mark their corresponding months as "selected"
@@ -156,12 +156,14 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
         // Only highlight the month if the selected date's year matches the current year
         if (targetYear === fp.currentYear) {
-          const monthElement = fp.rContainer.querySelector(
-            `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
-          );
-
-          if (monthElement) {
-            monthElement.classList.add("selected");
+          if (fp.rContainer) {
+            const monthElement = fp.rContainer.querySelector(
+              `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
+            );
+          
+            if (monthElement) {
+              monthElement.classList.add("selected");
+            }
           }
         }
       });

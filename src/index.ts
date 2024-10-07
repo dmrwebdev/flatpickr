@@ -2815,6 +2815,7 @@ function FlatpickrInstance(
       specificFormat ||
       (self.config.altInput ? self.config.altFormat : self.config.dateFormat);
 
+    // Modify here to handle multiple selections and join them in a more human-friendly format
     return self.selectedDates
       .map((dObj) => self.formatDate(dObj, format))
       .filter(
@@ -2824,7 +2825,9 @@ function FlatpickrInstance(
           arr.indexOf(d) === i
       )
       .join(
-        self.config.mode !== "range"
+        self.config.mode === "multiple"
+          ? ", "
+          : self.config.mode !== "range"
           ? self.config.conjunction
           : self.l10n.rangeSeparator
       );
@@ -2840,8 +2843,16 @@ function FlatpickrInstance(
           ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
           : "";
     }
-
-    self.input.value = getDateStr(self.config.dateFormat);
+    // Instead of joining selectedDates, keep them as an array
+    if (self.config.mode === "multiple") {
+      self.input.value = JSON.stringify(
+        self.selectedDates.map((date) =>
+          self.formatDate(date, self.config.dateFormat)
+        )
+      );
+    } else {
+      self.input.value = getDateStr(self.config.dateFormat);
+    }
 
     if (self.altInput !== undefined) {
       self.altInput.value = getDateStr(self.config.altFormat);

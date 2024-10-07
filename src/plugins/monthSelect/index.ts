@@ -160,7 +160,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
             const monthElement = fp.rContainer.querySelector(
               `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
             );
-          
+
             if (monthElement) {
               monthElement.classList.add("selected");
             }

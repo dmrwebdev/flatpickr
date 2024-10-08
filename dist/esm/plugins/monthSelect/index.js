@@ -99,8 +99,6 @@ function monthSelectPlugin(pluginConfig) {
         function setCurrentlySelected() {
             if (!fp.rContainer)
                 return;
-            if (!fp.selectedDates.length)
-                return;
             var currentlySelected = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month.selected");
             currentlySelected.forEach(function (el) {
                 el.classList.remove("selected");

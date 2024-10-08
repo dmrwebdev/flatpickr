@@ -138,7 +138,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
     function setCurrentlySelected() {
       if (!fp.rContainer) return;
-      if (!fp.selectedDates.length) return;
 
       // Clear the "selected" class from all month elements
       const currentlySelected = fp.rContainer.querySelectorAll(

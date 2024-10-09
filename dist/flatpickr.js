@@ -120,6 +120,8 @@
         prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
         shorthandCurrentMonth: false,
         showMonths: 1,
+        sort: false,
+        sortOrder: "asc",
         static: false,
         time_24hr: false,
         weekNumbers: false,
@@ -2294,10 +2296,20 @@
             self.redraw();
             updateValue(true);
         }
+        function sortDates(dates) {
+            return dates.sort(function (a, z) {
+                var aTime = a ? a.getTime() : 0;
+                var zTime = z ? z.getTime() : 0;
+                return self.config.sortOrder === "desc" ? zTime - aTime : aTime - zTime;
+            });
+        }
         function setSelectedDate(inputDate, format) {
             var dates = [];
-            if (inputDate instanceof Array)
+            if (inputDate instanceof Array) {
                 dates = inputDate.map(function (d) { return self.parseDate(d, format); });
+                if (self.config.sort)
+                    dates = sortDates(dates);
+            }
             else if (inputDate instanceof Date || typeof inputDate === "number")
                 dates = [self.parseDate(inputDate, format)];
             else if (typeof inputDate === "string") {
@@ -2310,6 +2322,8 @@
                         dates = inputDate
                             .split(self.config.conjunction)
                             .map(function (date) { return self.parseDate(date, format); });
+                        if (self.config.sort)
+                            dates = sortDates(dates);
                         break;
                     case "range":
                         dates = inputDate

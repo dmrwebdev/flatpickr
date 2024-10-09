@@ -1638,10 +1638,20 @@ function FlatpickrInstance(element, instanceConfig) {
         self.redraw();
         updateValue(true);
     }
+    function sortDates(dates) {
+        return dates.sort(function (a, z) {
+            var aTime = a ? a.getTime() : 0;
+            var zTime = z ? z.getTime() : 0;
+            return self.config.sortOrder === "desc" ? zTime - aTime : aTime - zTime;
+        });
+    }
     function setSelectedDate(inputDate, format) {
         var dates = [];
-        if (inputDate instanceof Array)
+        if (inputDate instanceof Array) {
             dates = inputDate.map(function (d) { return self.parseDate(d, format); });
+            if (self.config.sort)
+                dates = sortDates(dates);
+        }
         else if (inputDate instanceof Date || typeof inputDate === "number")
             dates = [self.parseDate(inputDate, format)];
         else if (typeof inputDate === "string") {
@@ -1654,6 +1664,8 @@ function FlatpickrInstance(element, instanceConfig) {
                     dates = inputDate
                         .split(self.config.conjunction)
                         .map(function (date) { return self.parseDate(date, format); });
+                    if (self.config.sort)
+                        dates = sortDates(dates);
                     break;
                 case "range":
                     dates = inputDate

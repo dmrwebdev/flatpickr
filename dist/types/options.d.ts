@@ -70,6 +70,8 @@ export interface BaseOptions {
     shorthandCurrentMonth: boolean;
     static: boolean;
     showMonths?: number;
+    sort: boolean;
+    sortOrder: string;
     time_24hr: boolean;
     weekNumbers: boolean;
     wrap: boolean;
@@ -140,6 +142,8 @@ export interface ParsedOptions {
     prevArrow: string;
     shorthandCurrentMonth: boolean;
     showMonths: number;
+    sort: boolean;
+    sortOrder: string;
     static: boolean;
     time_24hr: boolean;
     weekNumbers: boolean;

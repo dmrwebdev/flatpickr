@@ -258,6 +258,12 @@ Use it along with "enableTime" to create a time picker. */
   /* Sets the number of months to show */
   showMonths?: number;
 
+  /* Sort dates. Only applies to multiple */
+  sort: boolean;
+
+  /* Direction to sort dates when sorting is enabled */
+  sortOrder: string;
+
   /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
   time_24hr: boolean;
 
@@ -335,6 +341,8 @@ export interface ParsedOptions {
   prevArrow: string;
   shorthandCurrentMonth: boolean;
   showMonths: number;
+  sort: boolean;
+  sortOrder: string;
   static: boolean;
   time_24hr: boolean;
   weekNumbers: boolean;
@@ -417,6 +425,8 @@ export const defaults: ParsedOptions = {
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
   shorthandCurrentMonth: false,
   showMonths: 1,
+  sort: false,
+  sortOrder: "asc",
   static: false,
   time_24hr: false,
   weekNumbers: false,

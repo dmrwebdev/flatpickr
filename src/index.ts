@@ -2455,14 +2455,23 @@ function FlatpickrInstance(
     updateValue(true);
   }
 
+  function sortDates(dates: (Date | undefined)[]) {
+    return dates.sort((a, z) => {
+      const aTime = a ? a.getTime() : 0;
+      const zTime = z ? z.getTime() : 0;
+      return self.config.sortOrder === "desc" ? zTime - aTime : aTime - zTime;
+    });
+  }
+
   function setSelectedDate(
     inputDate: DateOption | DateOption[],
     format?: string
   ) {
     let dates: (Date | undefined)[] = [];
-    if (inputDate instanceof Array)
+    if (inputDate instanceof Array) {
       dates = inputDate.map((d) => self.parseDate(d, format));
-    else if (inputDate instanceof Date || typeof inputDate === "number")
+      if (self.config.sort) dates = sortDates(dates);
+    } else if (inputDate instanceof Date || typeof inputDate === "number")
       dates = [self.parseDate(inputDate, format)];
     else if (typeof inputDate === "string") {
       switch (self.config.mode) {
@@ -2475,6 +2484,7 @@ function FlatpickrInstance(
           dates = inputDate
             .split(self.config.conjunction)
             .map((date) => self.parseDate(date, format));
+          if (self.config.sort) dates = sortDates(dates);
           break;
 
         case "range":

@@ -327,10 +327,6 @@ function FlatpickrInstance(element, instanceConfig) {
         var oldYear = self.currentYear;
         var oldMonth = self.currentMonth;
         try {
-            if (jumpTo !== undefined) {
-                self.currentYear = jumpTo.getFullYear();
-                self.currentMonth = jumpTo.getMonth();
-            }
         }
         catch (e) {
             e.message = "Invalid date supplied: " + jumpTo;
@@ -1543,10 +1539,11 @@ function FlatpickrInstance(element, instanceConfig) {
             return;
         var target = t;
         var selectedDate = (self.latestSelectedDateObj = new Date(target.dateObj.getTime()));
-        var shouldChangeMonth = (selectedDate.getMonth() < self.currentMonth ||
+        var shouldChangeMonth = ((selectedDate.getMonth() < self.currentMonth ||
             selectedDate.getMonth() >
                 self.currentMonth + self.config.showMonths - 1) &&
-            self.config.mode !== "range";
+            self.config.mode !== "range") ||
+            self.config.mode !== "multiple";
         self.selectedDateElem = target;
         if (self.config.mode === "single")
             self.selectedDates = [selectedDate];
@@ -1604,8 +1601,6 @@ function FlatpickrInstance(element, instanceConfig) {
     var CALLBACKS = {
         locale: [setupLocale, updateWeekdays],
         showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
-        minDate: [jumpToDate],
-        maxDate: [jumpToDate],
         positionElement: [updatePositionElement],
         clickOpens: [
             function () {

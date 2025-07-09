@@ -228,7 +228,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       const selectedDate = new Date(
         fp.currentYear,
         date.getMonth(),
-        date.getDate()
+        1  // Always use day 1 for month selection
       );
 
       // Use existing selectedDates in fp

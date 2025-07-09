@@ -165,7 +165,7 @@ function monthSelectPlugin(pluginConfig) {
             }
         }
         function setMonth(date) {
-            var selectedDate = new Date(fp.currentYear, date.getMonth(), date.getDate());
+            var selectedDate = new Date(fp.currentYear, date.getMonth(), 1);
             var selectedDates = __spreadArrays(fp.selectedDates);
             switch (fp.config.mode) {
                 case "single":
